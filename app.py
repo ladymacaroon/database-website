@@ -1,11 +1,34 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    return "Hello, World!"
+@app.route("/", methods=["GET"])
+def index():
+    return """
+    <html>
+    <head>
+    <title>Login</title>
+    </head>
+    <body>
 
-@app.route("/ella")
-def ella():
-    return "Hello, Ella!"
+    <h1>Login</h1>
+
+    <form>
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname"><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname">
+    </form>
+
+    </body>
+    </html>
+"""
+
+@app.route('/users',methods=["POST","GET"])
+def users():
+   if request.method == 'POST':
+       print(request.json)
+       return "OK (POST)"
+   else:
+       return "OK (GET)"
+
