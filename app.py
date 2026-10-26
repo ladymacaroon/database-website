@@ -18,43 +18,20 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
-    return """
-    <html>
-    <head>
-    <title>Login</title>
-    </head>
-    <body>
+    return app.send_static_file("index.html")
 
-    <h1>Login</h1>
-
-    <form>
-    <label for="fname">Username:</label><br>
-    <input type="text" id="fname"><br>
-    <label for="lname">Password:</label><br>
-    <input type="text" id="lname"></form>
-
-    <form action="" method="post">
-        <input type="submit" name="submit" value="Submit" />
-    </form>
-
-    </body>
-    </html>
-"""
-
-@app.route('/users',methods=["POST","GET"])
+@app.route('/v1/users',methods=["POST"])
 def users():
-    if request.method == 'POST':
-        print(request.json)
+    print(request.form)
 
-        with sqlite3.connect("login.db") as conn:
-            cursor = conn.cursor()
-            cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?, ?)", (request.json["username"], request.json["password"]))
-            conn.commit()
-            return "OK"
-    else:
-        with sqlite3.connect("login.db") as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users")
-            result = cursor.fetchall()
-            return json.dumps(result)
+    with sqlite3.connect("login.db") as conn:
+        cursor = conn.cursor()
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        cursor.executescript(f"INSERT or IGNORE INTO users (username, password) VALUES ('{username}', '{password}')")
+
+        conn.commit()
+        return "OK"
+
     
