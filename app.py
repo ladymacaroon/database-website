@@ -31,7 +31,10 @@ def index():
     <label for="fname">Username:</label><br>
     <input type="text" id="fname"><br>
     <label for="lname">Password:</label><br>
-    <input type="text" id="lname">
+    <input type="text" id="lname"></form>
+
+    <form action="" method="post">
+        <input type="submit" name="submit" value="Submit" />
     </form>
 
     </body>
