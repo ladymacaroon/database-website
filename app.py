@@ -16,6 +16,10 @@ def database_initialise():
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET"])
+def index():
+       return app.send_static_file("index.html")
+
 @app.route("/registration", methods=["GET"])
 def register():
     return app.send_static_file("registration.html")
@@ -24,7 +28,13 @@ def register():
 def login():
     return app.send_static_file("login.html")
 
-@app.route('/v1/users',methods=["POST"])
+@app.route("/v1/idk", methods=["POST"])
+def idk():
+       login = request.form.get('clicked')
+       register = request.form.get('clicked')
+            
+
+@app.route('/v1/users', methods=["POST"])
 def users():
     print(request.form)
 
