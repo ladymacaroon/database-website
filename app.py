@@ -1,6 +1,7 @@
-from flask import Flask, request
+from flask import Flask, jsonify, request
 import sqlite3
 import json
+import hashlib
 
 def database_initialise():
     with sqlite3.connect("login.db") as conn:
@@ -36,14 +37,20 @@ def idk():
 
 @app.route('/v1/users', methods=["POST"])
 def users():
-    print(request.form)
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not username or not password:
+        return jsonify(success=False, message="Enter both a username and password."), 400
 
     with sqlite3.connect("login.db") as conn:
         cursor = conn.cursor()
-        username = request.form.get('username')
-        password = request.form.get('password')
+        password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
-        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (username, password))
+        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (username, password_hash))
+
+        if cursor.rowcount == 0:
+            return jsonify(success=False, message="That username is already registered."), 409
 
         conn.commit()
-        return "OK"
+        return jsonify(success=True, message="Registration successful.")
