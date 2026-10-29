@@ -16,9 +16,13 @@ def database_initialise():
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET"])
+@app.route("/registration", methods=["GET"])
 def index():
-    return app.send_static_file("index.html")
+    return app.send_static_file("registration.html")
+
+@app.route("/login", methods=["GET"])
+def index():
+    return app.send_static_file("login.html")
 
 @app.route('/v1/users',methods=["POST"])
 def users():
@@ -33,5 +37,3 @@ def users():
 
         conn.commit()
         return "OK"
-
-    

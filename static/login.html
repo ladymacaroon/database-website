@@ -1,13 +1,13 @@
 <!doctype html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
 
-    <h1>Register User</h1>
+    <h1>Login</h1>
 
     <form action="v1/users" method="post" target="dummyframe">
         <label for="username">Username:</label><br>
@@ -17,11 +17,6 @@
         <input type="text" id="password" name="password">
 
         <input type="submit" value="Submit">
-
-        <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-        </label>
     </form>
 </body>
 </html>

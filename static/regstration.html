@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+
+    <h1>Register User</h1>
+
+    <form action="v1/users" method="post" target="dummyframe">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password">
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
