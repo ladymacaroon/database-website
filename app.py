@@ -29,7 +29,7 @@ def users():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        cursor.executescript(f"INSERT or IGNORE INTO users (username, password) VALUES ('{username}', '{password}')")
+        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (username, password))
 
         conn.commit()
         return "OK"
