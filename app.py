@@ -17,11 +17,11 @@ def database_initialise():
 app = Flask(__name__)
 
 @app.route("/registration", methods=["GET"])
-def index():
+def register():
     return app.send_static_file("registration.html")
 
 @app.route("/login", methods=["GET"])
-def index():
+def login():
     return app.send_static_file("login.html")
 
 @app.route('/v1/users',methods=["POST"])
