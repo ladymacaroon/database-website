@@ -18,22 +18,12 @@ def database_initialise():
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
-def index():
-       return app.send_static_file("index.html")
+def login():
+    return app.send_static_file("login.html")
 
 @app.route("/registration", methods=["GET"])
 def register():
     return app.send_static_file("registration.html")
-
-@app.route("/login", methods=["GET"])
-def login():
-    return app.send_static_file("login.html")
-
-@app.route("/v1/idk", methods=["POST"])
-def idk():
-       login = request.form.get('clicked')
-       register = request.form.get('clicked')
-            
 
 @app.route('/v1/users', methods=["POST"])
 def users():
@@ -46,8 +36,9 @@ def users():
     with sqlite3.connect("login.db") as conn:
         cursor = conn.cursor()
         password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        case_corrected_username = username.lower()
 
-        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (username, password_hash))
+        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (case_corrected_username, password_hash))
 
         if cursor.rowcount == 0:
             return jsonify(success=False, message="That username is already registered."), 409
