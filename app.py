@@ -36,12 +36,38 @@ def users():
     with sqlite3.connect("login.db") as conn:
         cursor = conn.cursor()
         password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        case_corrected_username = username.lower()
+        formatted_username = username.strip().lower()
 
-        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (case_corrected_username, password_hash))
+        cursor.execute("INSERT or IGNORE INTO users (username, password) VALUES (?,?)", (formatted_username, password_hash))
 
         if cursor.rowcount == 0:
             return jsonify(success=False, message="That username is already registered."), 409
 
         conn.commit()
         return jsonify(success=True, message="Registration successful.")
+
+@app.route('/v1/login', methods=["POST"])
+def user_login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not username or not password:
+        return jsonify(success=False, message="Enter both a username and password."), 400
+
+    with sqlite3.connect("login.db") as conn:
+        cursor = conn.cursor()
+        password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        formatted_username = username.strip().lower()
+
+        cursor.execute("SELECT password FROM users WHERE username = (?)", (formatted_username,))
+        row = cursor.fetchone()
+        
+        if row:
+            stored_password = row[0]
+            
+            if password_hash == stored_password:
+                return jsonify(success=True, message="Login successful.")
+            else:
+                return jsonify(success=False, message="Username or password not found"), 401
+        else:
+            return jsonify(success=False, message="Username or password not found"), 401

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" href="static/styles.css">
     <title>Login</title>
 </head>
 <body>
@@ -8,15 +9,40 @@
 
     <h1>Login</h1>
 
-    <form action="v1/users" method="post" target="dummyframe">
+    <form id="login-form" action="v1/login" method="post">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username"><br>
 
         <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password"><br>
+        <input type="password" id="password" name="password"><br>
 
         <input type="submit" value="Submit">
         <input type="button" value="Register" onclick="location.href = 'registration';">
     </form>
+
+    <p id="form-status" role="status" aria-live="polite"></p>
+
+    <script>
+        const form = document.getElementById("login-form");
+        const status = document.getElementById("form-status");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            status.textContent = "Submitting...";
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                });
+                const result = await response.json();
+                status.textContent = result.message;
+                status.className = response.ok ? "success" : "error";
+            } catch {
+                status.textContent = "Login failed. Please try again or register as new.";
+                status.className = "error";
+            }
+        });
+    </script>
 </body>
 </html>
